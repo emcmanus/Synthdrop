@@ -11,7 +11,6 @@ gem 'turbolinks'
 gem 'jbuilder', '~> 2.0'
 gem 'sdoc', '~> 0.4.0',           group: :doc
 gem 'spring',                     group: :development
-gem 'delayed_job_active_record'
 gem 'rails_12factor',             group: :production
 gem 'paperclip'
 gem 'aws-sdk'
