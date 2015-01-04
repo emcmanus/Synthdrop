@@ -2,4 +2,5 @@
 
     bundle install
     rake db:setup
+    echo "SECRET_KEY_BASE="(rake secret) > .env
     foreman start
