@@ -1,7 +1,9 @@
 ### Get Started - FishFish Shell
 
-    # Only configure this first line!
+    # Only configure this first line
     set BOOTSKETCH_NAME YourNewProjectName
+
+    # The rest should be safe to copy & paste...
     set BOOTSKETCH_NAME_UPPER (echo $BOOTSKETCH_NAME | tr "[:lower:]" "[:upper:]")
 
     # Clone RailsBootsketch
