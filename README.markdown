@@ -16,10 +16,12 @@
     sed -i '' "s/RAILSBOOTSKETCH/$BOOTSKETCH_NAME_UPPER/g" **.rb **.yml
     git commit -am "Update project name."
 
-    # Create unique, local secret
-    echo "SECRET_KEY_BASE="(rake secret) > .env
-
     # Rails/DB setup
     bundle install
     rake db:setup
+
+    # Create unique, local secret
+    echo "SECRET_KEY_BASE="(rake secret) > .env
+
+    # Done!
     foreman start
