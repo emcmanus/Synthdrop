@@ -1,3 +1,3 @@
-// Lumen
+// Cyborg
 // Bootswatch
 // bootswatch.js
