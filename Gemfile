@@ -10,13 +10,14 @@ gem 'coffee-rails', '~> 4.0.0'
 gem 'jquery-rails'
 gem 'turbolinks'
 gem 'jbuilder', '~> 2.0'
-gem 'sdoc', '~> 0.4.0',   group: :doc
-gem 'spring',             group: :development
-gem 'rails_12factor',     group: :production
+gem 'sdoc', '~> 0.4.0',       group: :doc
+gem 'spring',                 group: :development
+gem 'rails_12factor',         group: :production
+gem 'web-console', '~> 2.0',  group: :development
 gem 'puma'
 gem 'sidekiq', '3.4.1'
 gem 'sidekiq-throttler'
-gem 'pry',                group: :development
+gem 'pry',                    group: :development
 gem 'less-rails'
 gem 'twitter-bootswatch-rails', '~> 3.3.4'
 gem 'twitter-bootswatch-rails-helpers'
@@ -28,7 +29,7 @@ gem 'kaminari-bootstrap', '~> 3.0.1'
 gem 'stringex'
 gem 'devise', '3.5.1'
 gem 'simple_form'
-gem 'therubyracer',       platforms: :ruby
+gem 'therubyracer',           platforms: :ruby
 gem 'devise-bootstrap-views'
 gem 'paperclip'
 gem 'hashie'
