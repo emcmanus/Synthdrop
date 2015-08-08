@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  get 'editor', to: 'editor#index', as: :editor
   root 'index#index'
 
   # The priority is based upon order of creation: first created -> highest priority.
