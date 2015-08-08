@@ -23,5 +23,8 @@
     # Create unique, local secret
     echo "SECRET_KEY_BASE="(rake secret) > .env
 
+    echo "" > README.markdown
+    git commit -am "Remove README"
+
     # Done!
     foreman start
