@@ -21,26 +21,6 @@ $(document).ready ->
       f.call(window)
   })
 
-  editor.commands.addCommand({
-    name: 'Save'
-    bindKey: {win: 'Ctrl-s', mac: 'Command-s'}
-    exec: (editor) ->
-      name = window.prompt "Enter a script name, e.g. com-lib-awesome-synth", ""
-
-      if name?.length > 0
-        fb = firebase.child('scripts').push()
-        fb.set({
-          name: name
-          data: editor.getValue()
-        }, ->
-          loc = fb.ref().toString()
-          scriptId = loc.substr(loc.lastIndexOf('/') + 1)
-          window.location.hash = scriptId
-        )
-      else
-        alert "Please enter a name"
-  })
-
   updateEditorHeight = ->
     editorElement = $('#editor')
     margin = editorElement.outerHeight(true) - editorElement.height()
