@@ -43,7 +43,11 @@
             </li>
           </ul>
           <ul class="nav navbar-nav navbar-right">
-            right
+            <% if user_signed_in? %>
+              <li> <%= link_to "Sign out", sign_out_path, method: :delete %> </li>
+            <% else %>
+              <li> <%= link_to "Sign in", new_user_session_path %> </li>
+            <% end %>
           </ul>
         </div><!-- /.navbar-collapse -->
 
@@ -52,7 +56,7 @@
 
     <div class="container-fluid">
       <%= bootswatch_flash %>
-      <%= yield %>
+      <%= yield(:content) or yield %>
     </div> <!-- /container -->
 
   </body>
