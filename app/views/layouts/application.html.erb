@@ -31,7 +31,7 @@
           </button>
           <%= link_to root_url, class: "navbar-brand" do %>
             <%= image_tag "icon@2x", width: 12, height: 22 %>
-            synthdrop <span class="current-file"></span>
+            synthdrop
           <% end %>
         </div>
 
@@ -39,7 +39,7 @@
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
           <ul class="nav navbar-nav">
             <li> <%= link_to "Explore", root_path %> </li>
-            <li> <%= link_to "Make", editor_path %> </li>
+            <li> <%= link_to "Files", root_path %> </li>
           </ul>
           <ul class="nav navbar-nav navbar-right">
             <% if user_signed_in? %>
