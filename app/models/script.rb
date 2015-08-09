@@ -5,6 +5,8 @@ class Script < ActiveRecord::Base
       secret_access_key: ENV['S3_SECRET_ACCESS_KEY'],
       bucket: ENV['S3_BUCKET_NAME'],
     },
-    url: "/scripts/:hash",
+    path: "/scripts/:hash",
     hash_secret: ENV['S3_SUPER_SECRET_SECRET']
+
+  do_not_validate_attachment_file_type :content
 end

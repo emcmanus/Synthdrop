@@ -2,12 +2,26 @@
   <div class="row">
     <div class="col-md-12">
       <h3>
-        Your Files
-        <div class="pull-right">
-          <%= link_to "New", "", class: "btn btn-default" %>
-        </div>
+        Top Files
       </h3>
       doot
     </div>
   </div>
+
+  <% if user_signed_in? %>
+  <div class="row">
+    <div class="col-md-12">
+      <h3>
+        Your Files
+        <div class="pull-right">
+          <%= link_to "New", new_script_path, class: "btn btn-default" %>
+        </div>
+      </h3>
+
+      <ul>
+        <%= render current_user.scripts %>
+      </ul>
+    </div>
+  </div>
+  <% end %>
 </div>

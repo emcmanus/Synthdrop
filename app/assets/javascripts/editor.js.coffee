@@ -29,6 +29,13 @@ $(document).ready ->
       f.call(window)
   })
 
+  editor.commands.addCommand({
+    name: 'Save'
+    bindKey: {win: 'Ctrl-s',  mac: 'Command-s'}
+    readOnly: true
+    exec: (editor) ->
+  })
+
   updateEditorHeight = ->
     editorElement = $('#editor')
     margin = editorElement.outerHeight(true) - editorElement.height()
@@ -37,3 +44,10 @@ $(document).ready ->
 
   updateEditorHeight()
   $(window).resize updateEditorHeight
+
+  # Load and edit remote script
+  resource_url = $("#editor").data('url')
+  if resource_url
+    $.ajax url: resource_url, success: (data) ->
+      editor.setValue data
+
