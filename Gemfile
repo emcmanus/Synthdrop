@@ -30,7 +30,6 @@ gem 'devise', '3.5.1'
 gem 'simple_form'
 gem 'therubyracer',           platforms: :ruby
 gem 'devise-bootstrap-views'
-gem 'paperclip'
 gem 'hashie'
 gem 'paranoia', '~> 2.0'
 gem 'ace-rails-ap'
