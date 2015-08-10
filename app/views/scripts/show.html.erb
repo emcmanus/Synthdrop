@@ -17,17 +17,7 @@
 
 <p>
   <strong>Content URL:</strong>
-  <%= @script.content.url %>
-</p>
-
-<p>
-  <strong>Content File size:</strong>
-  <%= @script.content_file_size %>
-</p>
-
-<p>
-  <strong>Content File name:</strong>
-  <%= @script.content_file_name %>
+  <%= link_to "Content", @script.content_url %>
 </p>
 
 <%= link_to 'Edit', edit_script_path(@script) %> |

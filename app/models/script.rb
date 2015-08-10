@@ -3,24 +3,21 @@ class Script < ActiveRecord::Base
   belongs_to :user
 
   def content_url
-    "#{ENV['S3_URL_PREFIX']}#{ENV['S3_BUCKET_NAME']}#{aws_path}"
+    "https://s3-#{ENV['AWS_REGION']}.amazonaws.com/#{ENV['AWS_S3_BUCKET_NAME']}/#{aws_path}"
   end
 
   def content
-    open(content_url).read
+    open(content_url).read if aws_id.present?
   end
 
   def content=(content)
-    aws_id ||= SecureRandom.hex
-    AWS::S3::Base.establish_connection!(
-      access_key_id:        ENV['S3_ACCESS_KEY_ID'],
-      secret_access_key:    ENV['S3_SECRET_ACCESS_KEY'],
-    )
-    AWS::S3::S3Object.store(aws_path, content, ENV['S3_BUCKET_NAME'], content_type: 'text/plain')
+    self.aws_id ||= SecureRandom.hex
+    Aws::S3::Client.new.put_object( body: content, key: aws_path, acl: 'public-read', bucket: ENV['AWS_S3_BUCKET_NAME'] )
+    content
   end
 
   private
     def aws_path
-      "/scripts/#{aws_id}"
+      "scripts/#{aws_id}"
     end
 end
