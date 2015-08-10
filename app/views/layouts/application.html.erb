@@ -22,7 +22,7 @@
 
     <!-- Fixed navbar -->
     <nav class="navbar navbar-default navbar-fixed-top">
-      <div class="container-fluid">
+      <div class="container<%= "-fluid" if is_editor? %>">
         <div class="navbar-header">
           <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
             <span class="icon-bar"></span>
@@ -62,7 +62,7 @@
       </div>
     </nav>
 
-    <div class="container-fluid">
+    <div class="container<%= "-fluid" if is_editor? %>">
       <%= bootswatch_flash %>
       <%= yield(:content).presence || yield %>
     </div> <!-- /container -->
