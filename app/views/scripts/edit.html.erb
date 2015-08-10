@@ -1,6 +1,6 @@
 <% content_for :filename, @script.title %>
 <div class="row">
   <div class="col-md-12">
-    <pre id="editor" style="display:none;" data-authenticity-token="<%= form_authenticity_token %>" data-update-url="<%= script_path(@script, format: :json) %>" data-content-url="<%= @script.content_url %>"></pre>
+    <div id="editor" style="display:none;" data-authenticity-token="<%= form_authenticity_token %>" data-update-url="<%= script_path(@script, format: :json) %>" data-content-url="<%= @script.content_url %>"></div>
   </div>
 </div>
