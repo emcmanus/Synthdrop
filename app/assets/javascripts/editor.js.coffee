@@ -8,7 +8,7 @@ $(document).ready ->
   editor.getSession().setMode("ace/mode/coffee")
   editor.getSession().setUseSoftTabs(true)
   editor.getSession().setTabSize(2)
-  editor.focus()
+  editor.$blockScrolling = Infinity # Disable deprecation warning
 
   editor.commands.removeCommand("gotoline")
 
@@ -59,5 +59,6 @@ $(document).ready ->
   resource_url = $("#editor").data('content-url')
   if resource_url
     $.ajax url: resource_url, success: (data) ->
-      editor.setValue data
+      editor.setValue data, -1
+      editor.focus()
 
