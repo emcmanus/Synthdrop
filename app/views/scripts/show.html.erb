@@ -16,8 +16,8 @@
 </p>
 
 <p>
-  <strong>Content URL:</strong>
-  <%= link_to "Content", @script.content_url %>
+  <strong>Content:</strong>
+  <pre><%= @script.content %></pre>
 </p>
 
 <%= link_to 'Edit', edit_script_path(@script) %> |

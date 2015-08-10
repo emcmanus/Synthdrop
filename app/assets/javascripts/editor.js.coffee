@@ -1,3 +1,5 @@
+current_worker = null
+
 $(document).ready ->
   $("#editor").show()
 
@@ -25,8 +27,10 @@ $(document).ready ->
     bindKey: {win: 'Ctrl-Enter',  mac: 'Command-Enter'}
     readOnly: true
     exec: (editor) ->
-      f = new Function CoffeeScript.compile(editor.getValue(), bare: true)
-      f.call(window)
+      script = CoffeeScript.compile(editor.getValue(), bare: true)
+      current_worker.terminate if current_worker
+      blob = new Blob([script])
+      current_worker = new Worker(URL.createObjectURL(blob))
   })
 
   editor.commands.addCommand({

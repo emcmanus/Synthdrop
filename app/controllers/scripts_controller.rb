@@ -1,6 +1,6 @@
 class ScriptsController < ApplicationController
-  before_action :authenticate_user!
-  before_action :set_script, only: [:show, :edit, :update, :destroy]
+  before_action :authenticate_user!, except: :show
+  before_action :set_script, only: [:edit, :update, :destroy]
 
   protect_from_forgery with: :exception
 
@@ -9,6 +9,7 @@ class ScriptsController < ApplicationController
   end
 
   def show
+    @script = Script.find(params[:id])
   end
 
   def new
