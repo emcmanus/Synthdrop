@@ -34,6 +34,16 @@ $(document).ready ->
     bindKey: {win: 'Ctrl-s',  mac: 'Command-s'}
     readOnly: true
     exec: (editor) ->
+      editorElement = $('#editor')
+      url = editorElement.data('update-url')
+      $.ajax( url, method: "PUT", data: {
+        'authenticity_token': editorElement.data('authenticity_token')
+        'script[content]': editor.getValue()
+      }).fail((request, status, error) ->
+        console.log "Failed with #{status}: #{error}"
+      ).done( ->
+        console.log "Done"
+      )
   })
 
   updateEditorHeight = ->
@@ -46,7 +56,7 @@ $(document).ready ->
   $(window).resize updateEditorHeight
 
   # Load and edit remote script
-  resource_url = $("#editor").data('url')
+  resource_url = $("#editor").data('content-url')
   if resource_url
     $.ajax url: resource_url, success: (data) ->
       editor.setValue data
