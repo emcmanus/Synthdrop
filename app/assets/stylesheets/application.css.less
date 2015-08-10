@@ -13,6 +13,16 @@ body {
   height: 100%;
 }
 
+#editor {
+  opacity: 1;
+  -webkit-transition: opacity 0.15s;
+  transition: opacity 0.15s;
+}
+
+#editor.blur {
+  opacity: 0.4;
+}
+
 .ace_scrollbar {
   display: none !important;
 }
