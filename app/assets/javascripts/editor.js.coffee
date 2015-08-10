@@ -94,7 +94,7 @@ class EditorBuilder
 scriptRunner = new ScriptRunner()
 
 $(document).ready ->
-  if editorElement = $('#editor')
+  if (editorElement = $('#editor')).length > 0
     editorBuilder = new EditorBuilder($('#editor'))
     editorBuilder.resize()
     

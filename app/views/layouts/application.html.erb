@@ -29,25 +29,34 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
+          <% if is_editor? %>
+            <%= link_to :back, class: "btn navbar-btn navbar-left navbar-back-btn" do %>
+              <span class="glyphicon glyphicon-arrow-left"></span>
+            <% end %>
+          <% end %>
           <%= link_to root_url, class: "navbar-brand" do %>
-            <%= image_tag "icon@2x.png", width: 12, height: 22 %>
+            <% unless is_editor? %>
+              <%= image_tag "icon@2x.png", width: 12, height: 22 %>
+            <% end %>
             synthdrop <span class="current-file"><%= "/ #{content_for(:filename)}" if content_for?(:filename) %></span>
           <% end %>
         </div>
 
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-          <ul class="nav navbar-nav">
-            <li> <%= link_to "Explore", root_path %> </li>
-            <li> <%= link_to "Files", root_path %> </li>
-          </ul>
-          <ul class="nav navbar-nav navbar-right">
-            <% if user_signed_in? %>
-              <li> <%= link_to "Sign out", destroy_user_session_path, method: :delete %> </li>
-            <% else %>
-              <li> <%= link_to "Sign in", new_user_session_path %> </li>
-            <% end %>
-          </ul>
+          <% unless is_editor? %>
+            <ul class="nav navbar-nav">
+              <li> <%= link_to "Explore", root_path %> </li>
+              <li> <%= link_to "Files", root_path %> </li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+              <% if user_signed_in? %>
+                <li> <%= link_to "Sign out", destroy_user_session_path, method: :delete %> </li>
+              <% else %>
+                <li> <%= link_to "Sign in", new_user_session_path %> </li>
+              <% end %>
+            </ul>
+          <% end %>
         </div><!-- /.navbar-collapse -->
 
       </div>
