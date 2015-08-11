@@ -60,7 +60,7 @@ class ScriptSaver
       0
 
   _checkDirty: =>
-    if @_dirtyElapsed() >= 3000
+    if @_dirtyElapsed() >= 2000
       $('#slow-load-notice').fadeIn()
     else
       $('#slow-load-notice').fadeOut()
