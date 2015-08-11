@@ -54,14 +54,6 @@ class EditorBuilder
   _configureCommands: ->
     @editor.commands.removeCommand("gotoline")
 
-    # Don't interpret Esc to mean blur - annoying in Vim insert mode
-    @editor.commands.addCommand({
-      name: 'Esc'
-      bindKey: {win: 'Esc',  mac: 'Esc'}
-      exec: (editor) ->
-        editor.focus()
-    })
-
     @editor.commands.addCommand({
       name: 'Run'
       bindKey: {win: 'Ctrl-Enter',  mac: 'Command-Enter'}
