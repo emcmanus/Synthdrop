@@ -55,6 +55,12 @@
                 <li> <%= link_to "Sign in", new_user_session_path %> </li>
               <% end %>
             </ul>
+          <% else %>
+            <ul class="nav navbar-nav navbar-right">
+              <div id="slow-load-notice" class="navbar-text">
+                <span class="label label-default"> Problem saving file. Retrying. </span>
+              </div>
+            </ul>
           <% end %>
         </div><!-- /.navbar-collapse -->
 

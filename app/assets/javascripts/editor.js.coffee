@@ -1,3 +1,7 @@
+# FIXME - The listeners probably cause this to leak when used over multiple
+# documents.
+
+
 # -
 class ScriptRunner
   constructor: ->
@@ -19,6 +23,57 @@ class ScriptRunner
     if @current_worker
       @current_worker.terminate()
 
+#
+# -
+class ScriptSaver
+  constructor: ->
+    @dirty = false
+    @dirty_since = undefined
+    @working = false
+
+  setBuilder: (@editorBuilder) ->
+    @_reset()
+
+    @editor = @editorBuilder.getEditor()
+    @editorElement = @editorBuilder.getEditorElement()
+
+    @editor.on "change", =>
+      @_markDirty()
+
+  _reset: ->
+    if @current_timer
+      window.clearInterval @current_timer
+    @current_timer = window.setInterval @_checkDirty, 500
+
+  _markDirty: =>
+    @dirty = true
+    @dirty_since = new Date
+
+  _markClean: =>
+    @dirty = false
+    @dirty_since = undefined
+
+  _dirtyElapsed: =>
+    if @dirty_since
+      new Date - @dirty_since
+    else
+      0
+
+  _checkDirty: =>
+    if @_dirtyElapsed() >= 3000
+      $('#slow-load-notice').fadeIn()
+    else
+      $('#slow-load-notice').fadeOut()
+
+    if @dirty && !@working
+      @working = true
+      @_startSave().always =>
+        @working = false
+
+  _startSave: =>
+    requestData ={ 'authenticity_token': @editorElement.data('authenticity_token'), 'script[content]': @editor.getValue() }
+    $.ajax( @editorElement.data('update-url'), method: "PUT", data: requestData ).done =>
+      @_markClean()
 
 # -
 class EditorBuilder
@@ -61,6 +116,12 @@ class EditorBuilder
   resize: ->
     @editor.resize()
 
+  getEditor: ->
+    @editor
+
+  getEditorElement: ->
+    @editorElement
+
   _addListeners: ->
     @editor.on "blur", =>
       @editorElement.addClass('blur')
@@ -83,16 +144,8 @@ class EditorBuilder
       name: 'Save'
       bindKey: {win: 'Ctrl-s',  mac: 'Command-s'}
       readOnly: true
-      exec: (editor) =>
-        url = @editorElement.data('update-url')
-        $.ajax( url, method: "PUT", data: {
-          'authenticity_token': @editorElement.data('authenticity_token')
-          'script[content]': editor.getValue()
-        }).fail((request, status, error) ->
-          console.log "Failed with #{status}: #{error}"
-        ).done( ->
-          console.log "Done"
-        )
+      exec: (editor) ->
+        alert "Saves are automatic."
     })
 
 
@@ -101,10 +154,11 @@ class EditorBuilder
 #
 
 scriptRunner = new ScriptRunner()
+scriptSaver = new ScriptSaver()
 
 $(document).ready ->
   if (editorElement = $('#editor')).length > 0
-    editorBuilder = new EditorBuilder($('#editor'))
+    editorBuilder = new EditorBuilder(editorElement)
     editorBuilder.resize()
 
     unless editorElement.hasClass("demo")
@@ -116,10 +170,19 @@ $(document).ready ->
       updateEditorHeight()
       $(window).resize updateEditorHeight
 
-    # Load and edit remote script
+    # Wait until we've updated the editor contents before attaching the
+    # scriptSaver. The script saver will otherwise act on the change event and
+    # issue a PUT to the server when it's not necessary. That's not normally
+    # a huge problem, but if you hit back in the browser it's possible to
+    # restore the text field to an earlier state, and then save THAT as the
+    # latest version of the document, losing lots of work!
     resource_url = editorElement.data('content-url')
     if resource_url
       $.ajax url: resource_url, success: (data) ->
         editorBuilder.updateContent(data)
+        scriptSaver.setBuilder(editorBuilder)
+
     else
       editorBuilder.updateContent("")
+      scriptSaver.setBuilder(editorBuilder)
+
