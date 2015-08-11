@@ -31,13 +31,17 @@ class EditorBuilder
     @editor = editor = ace.edit("editor")
     editor.setTheme("ace/theme/terminal")
 
-    if @keyboard == 'vim'
-      editor.setKeyboardHandler("ace/keyboard/vim")
+    switch @keyboard
+      when 'vim'
+        editor.setKeyboardHandler("ace/keyboard/vim")
+      when 'emacs'
+        editor.setKeyboardHandler("ace/keyboard/emacs")
 
-    if @language == 'coffeescript'
-      editor.getSession().setMode("ace/mode/coffee")
-    else
-      editor.getSession().setMode("ace/mode/javascript")
+    switch @language
+      when 'coffeescript'
+        editor.getSession().setMode("ace/mode/coffee")
+      when 'javascript'
+        editor.getSession().setMode("ace/mode/javascript")
 
     editor.getSession().setUseSoftTabs(true)
     editor.getSession().setTabSize(2)
