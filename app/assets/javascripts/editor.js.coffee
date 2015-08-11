@@ -23,12 +23,22 @@ class ScriptRunner
 # -
 class EditorBuilder
   constructor: (@editorElement) ->
+    @language = @editorElement.data('language')
+    @keyboard = @editorElement.data('keyboard')
+
     ace.config.set('workerPath', '/assets/ace')
 
     @editor = editor = ace.edit("editor")
     editor.setTheme("ace/theme/terminal")
-    editor.setKeyboardHandler("ace/keyboard/vim")
-    editor.getSession().setMode("ace/mode/coffee")
+
+    if @keyboard == 'vim'
+      editor.setKeyboardHandler("ace/keyboard/vim")
+
+    if @language == 'coffeescript'
+      editor.getSession().setMode("ace/mode/coffee")
+    else
+      editor.getSession().setMode("ace/mode/javascript")
+
     editor.getSession().setUseSoftTabs(true)
     editor.getSession().setTabSize(2)
     editor.$blockScrolling = Infinity # Disable deprecation warning
