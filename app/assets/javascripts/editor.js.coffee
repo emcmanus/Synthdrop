@@ -50,6 +50,9 @@ class EditorBuilder
     @_addListeners()
     @_configureCommands()
 
+    if window.yieldEditor
+      window.yieldEditor(editor)
+
   updateContent: (data) ->
     @editorElement.removeClass('unloaded')
     @editor.setValue data, -1

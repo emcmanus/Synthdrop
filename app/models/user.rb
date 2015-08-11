@@ -5,7 +5,8 @@ class User < ActiveRecord::Base
          :recoverable, :rememberable, :trackable, :validatable
   has_many :scripts
 
-  validates :keyboard, inclusion: { in: %w( default vim emacs ) }
+  validates :keyboard,  inclusion: { in: %w( default vim emacs ) }
+  validates :rc,        length: { minimum: 0, maximum: 5_000 }
 
   def keyboard=(value)
     write_attribute :keyboard, value.downcase

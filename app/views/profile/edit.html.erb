@@ -1,9 +1,21 @@
 <div class="row">
   <div class="col-md-6 col-md-push-3" style="padding-top: 30px;">
     <h3> Settings </h3>
-
     <%= simple_form_for(@user, url: edit_profile_path, method: :put, wrapper: :vertical_form) do |f| %>
-      <%= f.input :keyboard, collection: ["Default", "Vim", "Emacs"], selected: @user.keyboard.titleize %>
+      <%= f.input :keyboard, collection: ["Default", "Vim", "Emacs"], selected: @user.keyboard.titleize, label: 'Editor Keyboard' %>
+      <%= f.input :rc, label: 'Anything-Goes Configuration', placeholder: "window.yieldEditor = function(aceEditor){ /* Configure ace editor instance */ }", hint: "" %>
+      <p class="profile-form-hint">
+        <span class="label label-info">DANGER ZONE:</span> Never paste someone else's code here. This is included as a <code>&lt;script&gt;</code> on every page and <span style="text-decoration: underline;">has access to your private session data</span>. This also gives you the flexibility to extend Synthdrop in powerful ways.
+      </p>
+      <p class="profile-form-hint"> When defined, `window.yieldEditor()` is called after instantiating an instance of the Ace editor. Useful for adding custom key bindings. See <%= link_to "Ace Documentation", 'http://ace.c9.io/#nav=howto' %> for inspiration. </p>
+      <p class="profile-form-hint"> 
+        Note this site uses <%= link_to "Turbolinks", "https://github.com/rails/turbolinks" %> so your script will only be evaluated at the start of a session or on refresh.
+        To execute on every page load, use Jquery's ready handler, e.g.: <code> $(document).ready(function(){ alert('hi!'); }) </code>
+      </p>
+      <p class="profile-form-hint">
+        Max size: 5KB.
+      </p>
+      <hr />
       <%= f.button :submit, class: 'btn-primary' %>
     <% end %>
   </div>
