@@ -3,9 +3,9 @@
     <h3> Settings </h3>
     <%= simple_form_for(@user, url: edit_profile_path, method: :put, wrapper: :vertical_form) do |f| %>
       <%= f.input :keyboard, collection: ["Default", "Vim", "Emacs"], selected: @user.keyboard.titleize, label: 'Editor Keyboard' %>
-      <%= f.input :rc, label: 'Anything-Goes Configuration', placeholder: "window.yieldEditor = function(aceEditor){ /* Configure ace editor instance */ }", hint: "" %>
+      <%= f.input :rc, as: :text, label: 'Anything-Goes Configuration', placeholder: "window.yieldEditor = function(aceEditor){ /* Configure ace editor instance */ }", hint: "" %>
       <p class="profile-form-hint">
-        <span class="label label-danger">DANGER ZONE:</span> Never paste someone else's code here. This is included as a <code>&lt;script&gt;</code> on every page and <span style="text-decoration: underline;">has access to your private session data</span>. However, this also gives you the flexibility to extend the site in powerful ways.
+        <span class="label label-danger">DANGER ZONE:</span> Never paste someone else's code here. This is included as a <code>&lt;script&gt;</code> on every page and <span style="text-decoration: underline;">has access to your private session data</span>. Fortunately, this also gives you the flexibility to extend and customize the site in powerful ways.
       </p>
       <p class="profile-form-hint"> When defined, `window.yieldEditor()` is called after instantiating an instance of the Ace editor. Useful for adding custom key bindings. See <%= link_to "Ace Documentation", 'http://ace.c9.io/#nav=howto' %> for ideas. </p>
       <p class="profile-form-hint"> 
