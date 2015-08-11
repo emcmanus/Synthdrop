@@ -35,9 +35,6 @@
             <% end %>
           <% end %>
           <%= link_to root_url, class: "navbar-brand" do %>
-            <% unless is_editor? %>
-              <%= image_tag "icon@2x.png", width: 12, height: 22 %>
-            <% end %>
             synthdrop <span class="current-file"><%= "/ #{content_for(:filename)}" if content_for?(:filename) %></span>
           <% end %>
         </div>
