@@ -104,3 +104,5 @@ $(document).ready ->
     if resource_url
       $.ajax url: resource_url, success: (data) ->
         editorBuilder.updateContent(data)
+    else
+      editorBuilder.updateContent("")

@@ -22,7 +22,7 @@ class Script < ActiveRecord::Base
   end
 
   def content_url
-    "https://s3-#{ENV['AWS_REGION']}.amazonaws.com/#{ENV['AWS_S3_BUCKET_NAME']}/#{aws_path}"
+    "https://s3-#{ENV['AWS_REGION']}.amazonaws.com/#{ENV['AWS_S3_BUCKET_NAME']}/#{aws_path}" if aws_id.present?
   end
 
   def content
