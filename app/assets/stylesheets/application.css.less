@@ -13,18 +13,25 @@ body {
   height: 100%;
 }
 
-#editor {
-  opacity: 1;
-  -webkit-transition: opacity 0.15s;
-  transition: opacity 0.15s;
-}
-
 .navbar-back-btn {
   margin-right: 25px;
   padding-right: 25px;
   padding-left: 14px;
   border-radius: 0;
   border-right: 1px solid @gray;
+}
+
+#editor {
+  opacity: 1;
+  -webkit-transition: opacity 0.15s;
+  transition: opacity 0.15s;
+  position: relative;
+  height: 140px;
+}
+
+#editor.unloaded {
+  opacity: 0;
+  pointer-events: none;
 }
 
 #editor.blur {
@@ -39,17 +46,3 @@ span.current-file {
   color: @text-color;
 }
 
-#editor { 
-  position: relative;
-  height: 140px;
-}
-
-pre {
-  border: 0;
-  corner-radius: 0;
-}
-
-.navbar-brand img {
-  margin-top: -11px;
-  display: inline-block;
-}

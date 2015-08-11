@@ -33,11 +33,11 @@ class EditorBuilder
     editor.getSession().setTabSize(2)
     editor.$blockScrolling = Infinity # Disable deprecation warning
 
-    @editorElement.show()
     @_addListeners()
     @_configureCommands()
 
   updateContent: (data) ->
+    @editorElement.removeClass('unloaded')
     @editor.setValue data, -1
     @editor.focus()
 
@@ -97,14 +97,15 @@ $(document).ready ->
   if (editorElement = $('#editor')).length > 0
     editorBuilder = new EditorBuilder($('#editor'))
     editorBuilder.resize()
-    
-    updateEditorHeight = ->
-      margin = editorElement.outerHeight(true) - editorElement.height()
-      editorElement.height($(window.document).height() - $('nav').outerHeight(true) - margin)
-      editorBuilder.resize()
 
-    updateEditorHeight()
-    $(window).resize updateEditorHeight
+    unless editorElement.hasClass("demo")
+      updateEditorHeight = ->
+        margin = editorElement.outerHeight(true) - editorElement.height()
+        editorElement.height($(window.document).height() - $('nav').outerHeight(true) - margin)
+        editorBuilder.resize()
+
+      updateEditorHeight()
+      $(window).resize updateEditorHeight
 
     # Load and edit remote script
     resource_url = editorElement.data('content-url')

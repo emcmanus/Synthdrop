@@ -1,28 +1,49 @@
 <div class="container">
-  <div class="row">
-    <div class="col-md-12">
-      <h3>
-        Top Files
-      </h3>
-      <ul>
-        <%= render Script.all %>
-      </ul>
-    </div>
-  </div>
+  <div class="jumbotron">
+    <h2> A Place for Javascript Musicians </h2>
 
-  <% if user_signed_in? %>
+    <p> Build and share sophisticated tools for making music </p>
+
+    <div id="editor" class="demo blur" style="height: 100px;" data-content-url="https://s3-us-west-1.amazonaws.com/synthdrop/scripts/dc8606ea6d98885e517e898cb60ca304">Loading</div>
+
+    <%= link_to "Run", "javascript:alert('todo');", class: "btn btn-primary"%>
+    <%= link_to "Save", "javascript:alert('todo');", class: "btn btn-default"%>
+
+    <%= link_to "Go fullscreen", "javascript:alert('todo');", class: "pull-right" %>
+
+    <% if false %>
+      <h2>The easiest, fastest way to create music.</h2>
+
+      <ul>
+        <li> Sophisticated javascript tools for creating and sharing electronic music </li>
+        <li> Share your music with others </li>
+        <li> Show off </li>
+        <li> Easily share with folks </li>
+        <li> Community </li>
+        <li> Explore </li>
+        <li> Completely hackable </li>
+        <li> Fun </li>
+      </ul>
+    <% end %>
+  </div>
   <div class="row">
-    <div class="col-md-12">
+    <div class="col-md-6">
+      <h3>
+        Newest
+      </h3>
+      <hr/>
+      <%= render Script.order("updated_at DESC").limit(50) %>
+    </div>
+
+    <div class="col-md-6">
+      <% if user_signed_in? %>
       <h3>
         Your Files
-        <div class="pull-right">
-          <%= link_to "New", new_script_path, class: "btn btn-default" %>
-        </div>
       </h3>
-
-      <ul>
-        <%= render current_user.scripts %>
-      </ul>
+      <hr/>
+      <%= render current_user.scripts %>
+      <hr/>
+      <%= link_to "Create script", new_script_path %>
     </div>
   </div>
   <% end %>
