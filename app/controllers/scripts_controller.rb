@@ -5,7 +5,8 @@ class ScriptsController < ApplicationController
   protect_from_forgery with: :exception
 
   def index
-    @scripts = Script.all
+    @scripts = current_user.scripts.order("updated_at DESC")
+    @script_count = current_user.scripts.count
   end
 
   def show

@@ -1,29 +1,23 @@
-<p id="notice"><%= notice %></p>
 
-<p>
-  <strong>Title:</strong>
-  <%= @script.title %>
-</p>
+<div class="row">
+  <div class="col-md-12">
+    <h3>
+      <%= @script.title %>
+    </h3>
+    Updated <%= time_ago_in_words @script.updated_at %> ago
+    <p class="well"> <%= @script.description %> </p>
+  </div>
+</div>
 
-<p>
-  <strong>Description:</strong>
-  <%= @script.description %>
-</p>
+<div class="row">
+  <div class="col-md-12">
+    <pre><%= @script.content %></pre>
+  </div>
+</div>
 
-<p>
-  <strong>User:</strong>
-  <%= @script.user_id %>
-</p>
+<% if @script.user_id == current_user.id %>
+  <%= link_to "Edit", edit_script_path(@script), class: "btn btn-default" %>
+<% else %>
+  <%= link_to "Clone", "javascript:alert('todo');", class: "btn btn-default" %>
+<% end %>
 
-<p>
-  <strong>Import URL:</strong>
-  <pre><%= @script.content_url %></pre>
-</p>
-
-<p>
-  <strong>Content:</strong>
-  <pre><%= @script.content %></pre>
-</p>
-
-<%= link_to 'Edit', edit_script_path(@script) %> |
-<%= link_to 'Back', scripts_path %>
