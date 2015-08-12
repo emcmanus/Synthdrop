@@ -1,6 +1,7 @@
 # FIXME - The listeners probably cause this to leak when used over multiple
 # documents.
 
+SAVE_WARNING_THRESHOLD = 3000
 
 # -
 class ScriptRunner
@@ -60,7 +61,7 @@ class ScriptSaver
       0
 
   _checkDirty: =>
-    if @_dirtyElapsed() >= 2000
+    if @_dirtyElapsed() >= SAVE_WARNING_THRESHOLD
       $('#slow-load-notice').fadeIn()
     else
       $('#slow-load-notice').fadeOut()
