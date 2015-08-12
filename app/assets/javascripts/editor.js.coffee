@@ -12,11 +12,20 @@ class ScriptRunner
 
     script = CoffeeScript.compile(content, bare: true)
     blob = new Blob([script])
-    current_worker = new Worker(URL.createObjectURL(blob))
-    current_worker.onerror = @_workerError
 
-  _workerError: (error) ->
-    console.log "#{error.message}. Line #{error.lineno}"
+    @current_worker = new Worker(URL.createObjectURL(blob))
+    @current_worker.onerror = @_workerError
+    @current_worker.onmessage = @_workerMessage
+
+    if window.yieldWorker
+      window.yieldWorker(@current_worker)
+
+  _workerMessage: (message) =>
+    console.log "Worker message received. Arguments:"
+    console.log message.data
+
+  _workerError: (error) =>
+    console.log "Worker Error: #{error.message}. Line #{error.lineno}"
     console.log error
     error.preventDefault()
 

@@ -8,6 +8,9 @@
         <span class="label label-danger">DANGER ZONE:</span> Never paste someone else's code here. This is included as a <code>&lt;script&gt;</code> on every page and <span style="text-decoration: underline;">has access to your private session data</span>. Fortunately, this also gives you the flexibility to extend and customize the site in powerful ways.
       </p>
       <p class="profile-form-hint"> When defined, `window.yieldEditor()` is called after instantiating an instance of the Ace editor. Useful for adding custom key bindings. See <%= link_to "Ace Documentation", 'http://ace.c9.io/#nav=howto' %> for ideas. </p>
+      <p class="profile-form-hint">
+        When defined, `window.yieldWorker()` is called after instantiating a web worker to evaluate your script. This is useful if you'd like to override the worker's onmessage and onerror properties. It's recommended you chain either property, e.g.: <code> var _super = worker.onmessage; worker.onmessage = function(message){ _super.apply(undefined, arguments); myHandelr(message); } </code>
+      </p>
       <p class="profile-form-hint"> 
         This site uses <%= link_to "Turbolinks", "https://github.com/rails/turbolinks" %> so your script will only be evaluated at the start of a session or on refresh.
         To execute on every page load, use Jquery's ready handler, e.g.: <code> $(document).ready(function(){ alert('hi!'); }) </code>
