@@ -159,6 +159,9 @@ class EditorBuilder
   updateContent: (data) ->
     @editorElement.removeClass('unloaded')
     @editor.setValue data, -1
+    # Without this it's possible to undo back to an empty document, which gets
+    # saved and destroys your work!
+    @editor.getSession().getUndoManager().reset()
     @editor.focus()
 
   resize: ->
