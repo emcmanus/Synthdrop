@@ -1,25 +1,17 @@
 <div class="container">
   <div class="jumbotron">
 
-    <h2> Placeholder placeholder </h2>
+    <h2>Make some music</h2>
 
     <p>
-      Placeholder placeholder placeholder placeholder placeholder
+      Edit the code below and explore how easy it is to write your own audio generator.
     </p>
 
-    <div id="editor" class="demo blur" style="height: 100px;" data-content-url="https://s3-us-west-1.amazonaws.com/synthdrop/scripts/dc8606ea6d98885e517e898cb60ca304">Loading</div>
+    <div id="editor" class="demo blur" style="height: 100px;" data-content-url="https://s3-us-west-1.amazonaws.com/synthdrop/scripts/dc8606ea6d98885e517e898cb60ca304" data-language="coffeescript" data-keyboard="<%= current_user.try(:keyboard) %>">Loading</div>
 
-    <%= link_to "Run", "javascript:alert('todo');", class: "btn btn-primary"%>
-    <%= link_to "Save", "javascript:alert('todo');", class: "btn btn-default"%>
-
-    <%= link_to "Go fullscreen", "javascript:alert('todo');", class: "pull-right" %>
+    <%= link_to "Run", '', class: "btn btn-primary", id: 'demo-run' %>
 
     <% if false %>
-      <h2> Become a Javascript Musician </h2>
-
-      <p>
-        A simple, powerful platform to make and share music
-      </p>
 
       <h2>The easiest, fastest way to create music.</h2>
 

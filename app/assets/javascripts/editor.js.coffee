@@ -82,11 +82,12 @@ class ScriptSaver
   setBuilder: (@editorBuilder) ->
     @_reset()
 
-    @editor = @editorBuilder.getEditor()
-    @editorElement = @editorBuilder.getEditorElement()
+    unless @editorBuilder.isDemo()
+      @editor = @editorBuilder.getEditor()
+      @editorElement = @editorBuilder.getEditorElement()
 
-    @editor.on "change", =>
-      @_markDirty()
+      @editor.on "change", =>
+        @_markDirty()
 
   _reset: ->
     if @current_timer
@@ -159,9 +160,6 @@ class EditorBuilder
   updateContent: (data) ->
     @editorElement.removeClass('unloaded')
     @editor.setValue data, -1
-    # Without this it's possible to undo back to an empty document, which gets
-    # saved and destroys your work!
-    @editor.getSession().getUndoManager().reset()
     @editor.focus()
 
   resize: ->
@@ -172,6 +170,9 @@ class EditorBuilder
 
   getEditorElement: ->
     @editorElement
+
+  isDemo: ->
+    @editorElement.hasClass('demo')
 
   _addListeners: ->
     @editor.on "blur", =>
@@ -212,7 +213,7 @@ $(document).ready ->
     editorBuilder = new EditorBuilder(editorElement)
     editorBuilder.resize()
 
-    unless editorElement.hasClass("demo")
+    unless editorBuilder.isDemo()
       updateEditorHeight = ->
         margin = editorElement.outerHeight(true) - editorElement.height()
         editorElement.height($(window.document).height() - $('nav').outerHeight(true) - margin)
@@ -220,6 +221,10 @@ $(document).ready ->
 
       updateEditorHeight()
       $(window).resize updateEditorHeight
+
+    if demoRunButton = $('#demo-run')
+      $('#demo-run').click ->
+        editorBuilder.getEditor().execCommand('Run')
 
     # Wait until we've updated the editor contents before attaching the
     # scriptSaver. The script saver will otherwise act on the change event and
