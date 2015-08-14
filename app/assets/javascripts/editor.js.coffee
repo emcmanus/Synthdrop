@@ -1,14 +1,21 @@
 # FIXME - The listeners probably cause this to leak when used over multiple
 # documents.
 
+
 SAVE_WARNING_THRESHOLD = 3000
+
+AUDIO_BUFFER_SIZE = 2048
+SAMPLE_RATE = 44100
 
 # -
 class ScriptRunner
   constructor: ->
+    @_nextAudioBuffer = []
+    @_samplesGenerated = 0
+    @_audioStarted = false
 
   run: (content) ->
-    @killWorker()
+    @_killWorker()
 
     script = CoffeeScript.compile(content, bare: true)
     blob = new Blob([script])
@@ -20,18 +27,49 @@ class ScriptRunner
     if window.yieldWorker
       window.yieldWorker(@current_worker)
 
+    @_buildNextFrame()
+
   _workerMessage: (message) =>
-    console.log "Worker message received. Arguments:"
-    console.log message.data
+    switch message.data[0]
+      when "buffer"
+        @_nextAudioBuffer = message.data[1]
+        @_startAudio() unless @_audioStarted
+      when "log"
+        console.log message.data[1]
+      else
+        console.log "Worker message received. Arguments:"
+        console.log message.data
 
   _workerError: (error) =>
     console.log "Worker Error: #{error.message}. Line #{error.lineno}"
     console.log error
     error.preventDefault()
 
-  killWorker: ->
+  _killWorker: ->
     if @current_worker
       @current_worker.terminate()
+
+  _startAudio: ->
+    @_audioStarted = true
+    context = new (window.AudioContext || window.webkitAudioContext)()
+    @_source = context.createScriptProcessor(AUDIO_BUFFER_SIZE, 0, 1)
+    @_source.onaudioprocess = (event) =>
+      buffer = event.outputBuffer
+      outData = buffer.getChannelData(0)
+      if @_nextAudioBuffer.length > 0
+        for i in [0...buffer.length]
+          outData[i] = @_nextAudioBuffer[i]
+      else
+        console.log "MISSED A BUFFER"
+      @_nextAudioBuffer = []
+      @_buildNextFrame()
+    @_source.connect(context.destination)
+
+  _buildNextFrame: ->
+    @current_worker.postMessage(["generate", @_samplesGenerated, AUDIO_BUFFER_SIZE, SAMPLE_RATE])
+    @_samplesGenerated += AUDIO_BUFFER_SIZE
+
+
 
 #
 # -
