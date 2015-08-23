@@ -1,8 +1,8 @@
 <div class="row script-row">
   <div class="col-md-10">
     <h6>
-      <%= link_to script.title, script, style: "color: white;" %>
-      <small><%= link_to "Edit", edit_script_path(script), style: "display: inline-block; margin-left: 5px; margin-top: 11px;" %></small>
+      <%= link_to script.title, editor_script_path(script), style: "color: white;" %>
+      <small><%= link_to "View", script_path(script), style: "display: inline-block; margin-left: 5px; margin-top: 11px;" %></small>
     </h6>
   </div>
   <div class="col-md-2 text-right">

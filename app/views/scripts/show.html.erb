@@ -1,4 +1,3 @@
-
 <div class="row">
   <div class="col-md-12">
     <div class="pull-right" style="padding-top: 25px;">
@@ -8,22 +7,32 @@
       <%= @script.title %>
     </h3>
     Updated <%= time_ago_in_words @script.updated_at %> ago
+
+     - <%= link_to "edit details", edit_script_path(@script) %>
     <p class="well"> <%= @script.description %> </p>
   </div>
 </div>
 
-<div class="row">
-  <div class="col-md-12">
-    <p>
-      Import with: <pre> importScripts "<%= @script.content_url %>" </pre><br/>
-    </p>
-    <p>Content:</p>
-    <pre><%= @script.content %></pre>
+
+<% if @script.aws_id.present? %>
+  <div class="row">
+    <div class="col-md-12">
+      <p>
+        Import with: <pre> importScripts "<%= @script.content_url %>" # <%= @script.title %></pre>
+        <br/>
+      </p>
+      <p>Content:</p>
+      <pre><%= @script.content %></pre>
+    </div>
   </div>
-</div>
+<% end %>
 
 <% if @script.user_id == current_user.id %>
-  <%= link_to "Edit", edit_script_path(@script), class: "btn btn-default" %>
+  <% if @script.aws_id.present? %>
+    <%= link_to "Open Editor", editor_script_path(@script), class: "btn btn-default" %>
+  <% else %>
+    <%= link_to "Start Editing", editor_script_path(@script), class: "btn btn-primary" %>
+  <% end %>
 <% else %>
   <%= link_to "Clone", "javascript:alert('todo');", class: "btn btn-default" %>
 <% end %>

@@ -3,7 +3,7 @@ class User < ActiveRecord::Base
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable
-  has_many :scripts
+  has_many :scripts, -> { order('updated_at DESC') }
 
   validates :keyboard,  inclusion: { in: %w( default vim emacs ) }
   validates :rc,        length: { maximum: 5_000 }

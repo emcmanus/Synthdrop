@@ -6,9 +6,12 @@ Rails.application.routes.draw do
   put 'profile', to: 'profile#update'
   get 'profile/rc', to: 'profile#rc'
 
-  resources :scripts, except: :delete
-
-  get 'editor', to: 'editor#index', as: :editor
+  resources :scripts do
+    member do
+      get 'url'
+      get 'editor'
+    end
+  end
 
   root 'index#index'
 end

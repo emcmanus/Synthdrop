@@ -10,6 +10,17 @@ class Script < ActiveRecord::Base
     write_attribute :language, value.downcase
   end
 
+  def language_value
+    case language
+    when 'javascript'
+      'JavaScript'
+    when 'coffeescript'
+      'CoffeeScript'
+    else
+      language
+    end
+  end
+
   def extension
     case language
     when 'javascript'
@@ -21,12 +32,16 @@ class Script < ActiveRecord::Base
     end
   end
 
+  def has_content?
+    aws_id.present?
+  end
+
   def content_url
-    "https://s3-#{ENV['AWS_REGION']}.amazonaws.com/#{ENV['AWS_S3_BUCKET_NAME']}/#{aws_path}" if aws_id.present?
+    "https://s3-#{ENV['AWS_REGION']}.amazonaws.com/#{ENV['AWS_S3_BUCKET_NAME']}/#{aws_path}" if has_content?
   end
 
   def content
-    open(content_url).read if aws_id.present?
+    open(content_url).read if has_content?
   end
 
   def content=(content)

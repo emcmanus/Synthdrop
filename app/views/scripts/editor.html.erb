@@ -1,0 +1,11 @@
+<% content_for :title, "#{@script.title}#{@script.extension}" %>
+<% content_for :filename, @script.title %>
+<div class="row">
+  <div class="col-md-12">
+    <div id="editor" class="unloaded" data-authenticity-token="<%= form_authenticity_token %>" data-update-url="<%= script_path(@script, format: :json) %>" data-content-url="<%= @script.content_url %>" data-language="<%= @script.language %>" data-keyboard="<%= current_user.keyboard %>"></div>
+  </div>
+</div>
+
+<div id="editor-protip" class="text-center text-muted">
+  Protip: open your browser's javascript console
+</div>

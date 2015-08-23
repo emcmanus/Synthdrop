@@ -1,11 +1,10 @@
-<% content_for :title, "#{@script.title}#{@script.extension}" %>
-<% content_for :filename, @script.title %>
-<div class="row">
-  <div class="col-md-12">
-    <div id="editor" class="unloaded" data-authenticity-token="<%= form_authenticity_token %>" data-update-url="<%= script_path(@script, format: :json) %>" data-content-url="<%= @script.content_url %>" data-language="<%= @script.language %>" data-keyboard="<%= current_user.keyboard %>"></div>
-  </div>
-</div>
+<% content_for :title, "Edit #{@script.title}" %>
 
-<div id="editor-protip" class="text-center text-muted">
-  Protip: open your browser's javascript console
+<div class="row">
+  <div class="col-md-6 col-md-push-3" style="padding-top: 30px;">
+    <h3> Edit <%= @script.title %> </h3>
+    <%= render 'form' %>
+    <br />
+    <%= link_to "Delete", script_path(@script), method: :delete, data: {confirm: "Are you sure? This can't be undone."}, class: 'text-warning' %>
+  </div>
 </div>

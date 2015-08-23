@@ -1,6 +1,6 @@
 class ScriptsController < ApplicationController
   before_action :authenticate_user!, except: :show
-  before_action :set_script, only: [:edit, :update, :destroy]
+  before_action :set_script, only: [:edit, :editor, :update, :destroy]
 
   protect_from_forgery with: :exception
 
@@ -18,6 +18,9 @@ class ScriptsController < ApplicationController
   end
 
   def edit
+  end
+
+  def editor
   end
 
   def create
@@ -38,12 +41,20 @@ class ScriptsController < ApplicationController
   def update
     respond_to do |format|
       if @script.update(script_params)
-        format.html { redirect_to edit_script_path(@script) }
+        format.html { redirect_to script_path(@script), notice: 'Updated script' }
         format.json { render json: {}, status: :ok }
       else
         format.html { render :edit }
         format.json { render json: @script.errors, status: :unprocessable_entity }
       end
+    end
+  end
+
+  def destroy
+    if @script.destroy
+      redirect_to({action: :index}, {notice: "Deleted #{@script.title}"})
+    else
+      redirect_to({action: :index}, {alert: "Unable to delete #{@script.title}"})
     end
   end
 
