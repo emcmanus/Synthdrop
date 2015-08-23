@@ -33,11 +33,13 @@
   </div>
 </div>
 
+<% if @script.aws_id.present? %>
 <div class="row">
   <div class="col-md-12">
     <div id="editor" class="unloaded demo" data-content-url="<%= script_content_url @script %>" data-language="<%= @script.language %>" data-read-only="true"></div>
   </div>
 </div>
+<% end %>
 
 <div class="row" style="margin: 20px 0;">
   <div class="col-md-12">
