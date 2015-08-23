@@ -73,7 +73,8 @@ class ScriptRunner
     @_source.connect(context.destination)
 
   _stopAudio: ->
-    @_source.disconnect()
+    try
+      @_source.disconnect()
     @_audioStarted = false
 
   _buildNextFrame: ->
