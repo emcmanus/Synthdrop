@@ -8,7 +8,6 @@ Rails.application.routes.draw do
 
   resources :scripts do
     member do
-      get 'url'
       get 'editor'
     end
   end
