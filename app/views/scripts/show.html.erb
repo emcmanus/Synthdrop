@@ -4,34 +4,43 @@
   <div class="col-md-12">
     <h3>
       <%= @script.title %>
-      <% if @script.user_id == current_user.id %>
       <div class="pull-right">
         <% if @script.aws_id.present? %>
-          <%= link_to "Open Editor", editor_script_path(@script), class: "btn btn-default" %>
+          <% if current_user && @script.user_id == current_user.id %>
+            <%= link_to "Open Editor", editor_script_path(@script), class: "btn btn-default" %>
+          <% end %>
           <%= link_to "Play", '#', id: "play-btn", class: "btn btn-primary" %>
           <%= link_to "Stop", '#', id: "stop-btn", class: "btn btn-primary" %>
         <% else %>
-          <%= link_to "Start Editing", editor_script_path(@script), class: "btn btn-primary" %>
+          <% if current_user && @script.user_id == current_user.id %>
+            <%= link_to "Start Editing", editor_script_path(@script), class: "btn btn-primary" %>
+          <% end %>
         <% end %>
       </div>
 
       <span class="label label-info" style="font-size: 30%; position: relative; top: -5px; left: 10px;"><%= @script.language.titleize %></span>
     </h3>
-    <% end %>
   </div>
 </div>
 
-<div class="row">
-  <div class="col-md-12">
-    <p class="well">
-      <% if @script.description.present? %>
-        <%= @script.description %> - <%= link_to "Edit details", edit_script_path(@script) %>
-      <% else %>
-        <%= link_to "Add description", edit_script_path(@script) %>
-      <% end %>
-    </p>
+<% if (current_user && @script.user_id == current_user.id) || @script.description.present? %>
+  <div class="row">
+    <div class="col-md-12">
+      <p class="well">
+        <% if @script.description.present? %>
+          <%= @script.description %>
+          <% if current_user && @script.user_id == current_user.id %>
+            - <%= link_to "Edit details", edit_script_path(@script) %>
+          <% end %>
+        <% else %>
+          <% if current_user && @script.user_id == current_user.id %>
+            <%= link_to "Add description", edit_script_path(@script) %>
+          <% end %>
+        <% end %>
+      </p>
+    </div>
   </div>
-</div>
+<% end %>
 
 <% if @script.aws_id.present? %>
 <div class="row">
