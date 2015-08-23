@@ -93,10 +93,8 @@ class ScriptSaver
 
   setBuilder: (@editorBuilder) ->
     @_reset()
-
-    unless @editorBuilder.isDemo()
-      @editor = @editorBuilder.getEditor()
-      @editorElement = @editorBuilder.getEditorElement()
+    @editor = @editorBuilder.getEditor()
+    @editorElement = @editorBuilder.getEditorElement()
 
   compiledSource: (suppressWarning) ->
     content = @editor.getValue()
@@ -238,8 +236,9 @@ class EditorBuilder
       name: 'Save'
       bindKey: {win: 'Ctrl-s',  mac: 'Command-s'}
       readOnly: true
-      exec: (editor) ->
-        scriptSaver._markDirty() # TODO Clean up!
+      exec: (editor) =>
+        unless @isDemo()
+          scriptSaver._markDirty()
     })
 
 # TODO - move to event system
@@ -276,8 +275,6 @@ $(document).ready ->
       $(window).resize updateEditorHeight
 
     hideEditorControls()
-    $('#demo-run').click ->
-      editorBuilder.getEditor().execCommand('Run')
     $('#play-btn').click ->
       editorBuilder.getEditor().execCommand('Run')
     $('#stop-btn').click ->

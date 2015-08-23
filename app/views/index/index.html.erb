@@ -9,7 +9,8 @@
 
     <div id="editor" class="demo blur" style="height: 100px;" data-content-url="https://s3-us-west-1.amazonaws.com/synthdrop/scripts/dc8606ea6d98885e517e898cb60ca304" data-language="coffeescript" data-keyboard="<%= current_user.try(:keyboard) %>">Loading</div>
 
-    <%= link_to "Run", '', class: "btn btn-primary", id: 'demo-run' %>
+    <%= link_to "Play", '#', id: 'play-btn', class: 'btn btn-primary', title: 'cmd + enter' %>
+    <%= link_to "Stop", '#', id: 'stop-btn', class: 'btn btn-primary', title: 'cmd + .' %>
 
     <div class="pull-right" style="padding-top: 20px;">
       <span class="label label-default">Coffeescript</span>
