@@ -131,9 +131,21 @@ class ScriptSaver
         @working = false
 
   _startSave: =>
-    requestData ={ 'authenticity_token': @editorElement.data('authenticity_token'), 'script[content]': @editor.getValue() }
+    requestData ={
+      'authenticity_token': @editorElement.data('authenticity_token')
+      'script[content]': @editor.getValue()
+      'script[compiled_content]': @_compiledSource()
+    }
     $.ajax( @editorElement.data('update-url'), method: "PUT", data: requestData ).done =>
       @_markClean()
+
+  _compiledSource: ->
+    content = @editor.getValue()
+    switch @editorElement.data('language')
+      when 'coffeescript'
+        CoffeeScript.compile(content, bare: true)
+      else
+        content
 
 
 scriptRunner = new ScriptRunner()
