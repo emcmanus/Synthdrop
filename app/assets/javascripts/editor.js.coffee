@@ -192,6 +192,7 @@ class EditorBuilder
       editor.setHighlightActiveLine(false)
       editor.setHighlightGutterLine(false)
       editor.setShowPrintMargin(false)
+      editor.setOptions { maxLines: 100 }
 
     if window.yieldEditor
       window.yieldEditor(editor)

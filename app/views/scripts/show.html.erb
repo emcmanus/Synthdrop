@@ -23,7 +23,13 @@
 
 <div class="row">
   <div class="col-md-12">
-    <p class="well"> <%= @script.description %> </p>
+    <p class="well">
+      <% if @script.description.present? %>
+        <%= @script.description %> - <%= link_to "Edit details", edit_script_path(@script) %>
+      <% else %>
+        <%= link_to "Add description", edit_script_path(@script) %>
+      <% end %>
+    </p>
   </div>
 </div>
 
@@ -36,10 +42,17 @@
 <div class="row" style="margin: 20px 0;">
   <div class="col-md-12">
     <p>
-      Updated <%= time_ago_in_words @script.updated_at %> ago.
       <% if @script.aws_id.present? %>
-        Import with: <pre> importScripts "<%= @script.compiled_content_url %>" # <%= @script.title %></pre>
+      <div class="list-group">
+        <div class="list-group-item">
+          <h5 class="list-group-item-heading">Import This Code</h5>
+          <p class="list-group-item-text">
+            <samp style="font-size: 87%;">importScripts "<%= @script.compiled_content_url %>" # <%= @script.title %></samp>
+          </p>
+        </div>
+      </div>
       <% end %>
     </p>
+      Updated <%= time_ago_in_words @script.updated_at %> ago.
   </div>
 </div>

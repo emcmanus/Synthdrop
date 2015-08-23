@@ -12,7 +12,7 @@
   <div class="form-actions">
     <%= f.submit "Submit", class: 'btn btn-primary' %>
     <% unless @script.new_record? %>
-      <%= link_to "Delete", script_path(@script), method: :delete, data: {confirm: "Are you sure?"}, class: 'text-warning', style: 'margin-left: 15px;' %>
+      <%= link_to "Delete", script_path(@script), method: :delete, data: {confirm: "Are you sure?"}, class: 'text-danger', style: 'margin-left: 15px;' %>
     <% end %>
   </div>
 <% end %>
