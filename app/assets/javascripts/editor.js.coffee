@@ -189,6 +189,9 @@ class EditorBuilder
 
     if @readOnly
       editor.setReadOnly(true)
+      editor.setHighlightActiveLine(false)
+      editor.setHighlightGutterLine(false)
+      editor.setShowPrintMargin(false)
 
     if window.yieldEditor
       window.yieldEditor(editor)
@@ -239,9 +242,9 @@ class EditorBuilder
     @editor.commands.addCommand({
       name: 'Save'
       bindKey: {win: 'Ctrl-s',  mac: 'Command-s'}
-      readOnly: true
+      readOnly: false
       exec: (editor) =>
-        unless @isDemo() || @readOnly
+        unless @isDemo()
           scriptSaver._markDirty()
     })
 
