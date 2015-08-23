@@ -10,7 +10,7 @@
   </div>
 
   <div class="form-actions">
-    <%= f.button :submit, class: 'btn-primary' %>
+    <%= f.submit "Submit", class: 'btn btn-primary' %>
     <% unless @script.new_record? %>
       <%= link_to "Delete", script_path(@script), method: :delete, data: {confirm: "Are you sure?"}, class: 'text-warning', style: 'margin-left: 15px;' %>
     <% end %>
