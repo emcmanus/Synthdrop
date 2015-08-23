@@ -59,6 +59,14 @@
             </ul>
           <% else %>
             <ul class="nav navbar-nav navbar-right">
+              <li> <%= link_to "Play", '#', id: 'play-btn', title: 'cmd + enter' %> </li>
+              <li> <%= link_to "Stop", '#', id: 'stop-btn', title: 'cmd + .' %> </li>
+              <li> <%= link_to "Save", '#', id: 'save-btn', title: 'cmd + s' %> </li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+              <div id='saving-notice' class='navbar-text'>
+                <span class="label label-primary"> Saving ... </span>
+              </div>
               <div id="slow-load-notice" class="navbar-text">
                 <span class="label label-default"> Problem saving file. Retrying. </span>
               </div>

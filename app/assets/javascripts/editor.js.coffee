@@ -1,6 +1,8 @@
 # FIXME - The listeners probably cause this to leak when used over multiple
 # documents.
 
+# TODO - Migrate to event system for much of this
+
 
 SAVE_WARNING_THRESHOLD = 3000
 
@@ -14,8 +16,9 @@ class ScriptRunner
     @_samplesGenerated = 0
     @_audioStarted = false
 
-  run: (content) ->
+  play: (content) ->
     @_killWorker()
+    setEditorControlPlayState(true)
 
     script = CoffeeScript.compile(content, bare: true)
     blob = new Blob([script])
@@ -28,6 +31,11 @@ class ScriptRunner
       window.yieldWorker(@current_worker)
 
     @_buildNextFrame()
+
+  stop: ->
+    @_killWorker()
+    @_stopAudio()
+    setEditorControlPlayState(false)
 
   _workerMessage: (message) =>
     switch message.data[0]
@@ -65,6 +73,10 @@ class ScriptRunner
       @_buildNextFrame()
     @_source.connect(context.destination)
 
+  _stopAudio: ->
+    @_source.disconnect()
+    @_audioStarted = false
+
   _buildNextFrame: ->
     @current_worker.postMessage(["generate", @_samplesGenerated, AUDIO_BUFFER_SIZE, SAMPLE_RATE])
     @_samplesGenerated += AUDIO_BUFFER_SIZE
@@ -86,21 +98,20 @@ class ScriptSaver
       @editor = @editorBuilder.getEditor()
       @editorElement = @editorBuilder.getEditorElement()
 
-      @editor.on "change", =>
-        @_markDirty()
-
   _reset: ->
     if @current_timer
       window.clearInterval @current_timer
-    @current_timer = window.setInterval @_checkDirty, 500
+    @current_timer = window.setInterval @_checkDirty, 250
 
   _markDirty: =>
     @dirty = true
     @dirty_since = new Date
+    $('#saving-notice').show()
 
   _markClean: =>
     @dirty = false
     @dirty_since = undefined
+    $('#saving-notice').hide()
 
   _dirtyElapsed: =>
     if @dirty_since
@@ -123,6 +134,10 @@ class ScriptSaver
     requestData ={ 'authenticity_token': @editorElement.data('authenticity_token'), 'script[content]': @editor.getValue() }
     $.ajax( @editorElement.data('update-url'), method: "PUT", data: requestData ).done =>
       @_markClean()
+
+
+scriptRunner = new ScriptRunner()
+scriptSaver = new ScriptSaver()
 
 # -
 class EditorBuilder
@@ -189,7 +204,15 @@ class EditorBuilder
       bindKey: {win: 'Ctrl-Enter',  mac: 'Command-Enter'}
       readOnly: true
       exec: (editor) ->
-        scriptRunner.run(editor.getValue())
+        scriptRunner.play(editor.getValue())
+    })
+
+    @editor.commands.addCommand({
+      name: 'Stop'
+      bindKey: {win: 'Ctrl-.',  mac: 'Command-.'}
+      readOnly: true
+      exec: (editor) ->
+        scriptRunner.stop()
     })
 
     @editor.commands.addCommand({
@@ -197,16 +220,27 @@ class EditorBuilder
       bindKey: {win: 'Ctrl-s',  mac: 'Command-s'}
       readOnly: true
       exec: (editor) ->
-        alert "Saves are automatic."
+        scriptSaver._markDirty() # TODO Clean up!
     })
 
+# TODO - move to event system
+showEditorControls = ->
+  $('#play-btn, #save-btn').show()
+
+hideEditorControls = ->
+  $('#play-btn, #stop-btn, #save-btn').hide()
+
+setEditorControlPlayState = (playing) ->
+  if playing
+    $('#play-btn').hide()
+    $('#stop-btn').show()
+  else
+    $('#play-btn').show()
+    $('#stop-btn').hide()
 
 #
 # Start of execution
 #
-
-scriptRunner = new ScriptRunner()
-scriptSaver = new ScriptSaver()
 
 $(document).ready ->
   if (editorElement = $('#editor')).length > 0
@@ -222,9 +256,15 @@ $(document).ready ->
       updateEditorHeight()
       $(window).resize updateEditorHeight
 
-    if demoRunButton = $('#demo-run')
-      $('#demo-run').click ->
-        editorBuilder.getEditor().execCommand('Run')
+    hideEditorControls()
+    $('#demo-run').click ->
+      editorBuilder.getEditor().execCommand('Run')
+    $('#play-btn').click ->
+      editorBuilder.getEditor().execCommand('Run')
+    $('#stop-btn').click ->
+      editorBuilder.getEditor().execCommand('Stop')
+    $('#save-btn').click ->
+      editorBuilder.getEditor().execCommand('Save')
 
     # Wait until we've updated the editor contents before attaching the
     # scriptSaver. The script saver will otherwise act on the change event and
@@ -237,8 +277,9 @@ $(document).ready ->
       $.ajax url: resource_url, success: (data) ->
         editorBuilder.updateContent(data)
         scriptSaver.setBuilder(editorBuilder)
-
+        showEditorControls()
     else
       editorBuilder.updateContent("")
       scriptSaver.setBuilder(editorBuilder)
+      showEditorControls()
 
