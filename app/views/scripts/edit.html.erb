@@ -5,6 +5,8 @@
     <h3> Edit <%= @script.title %> </h3>
     <%= render 'form' %>
     <br />
-    <%= link_to "Delete", script_path(@script), method: :delete, data: {confirm: "Are you sure? This can't be undone."}, class: 'text-warning' %>
+    <p>
+      <%= link_to "Back", scripts_path %>
+    </p>
   </div>
 </div>
