@@ -16,12 +16,11 @@ class ScriptRunner
     @_samplesGenerated = 0
     @_audioStarted = false
 
-  play: (content) ->
+  play: (compiledSource) ->
     @_killWorker()
     setEditorControlPlayState(true)
 
-    script = CoffeeScript.compile(content, bare: true)
-    blob = new Blob([script])
+    blob = new Blob([compiledSource])
 
     @current_worker = new Worker(URL.createObjectURL(blob))
     @current_worker.onerror = @_workerError
@@ -68,7 +67,7 @@ class ScriptRunner
         for i in [0...buffer.length]
           outData[i] = @_nextAudioBuffer[i]
       else
-        console.log "MISSED A BUFFER"
+        console.log "MISSED A BUFFER. This may mean your script is not fast enough to process audio in realtime, or could be the result of some other bug."
       @_nextAudioBuffer = []
       @_buildNextFrame()
     @_source.connect(context.destination)
@@ -97,6 +96,21 @@ class ScriptSaver
     unless @editorBuilder.isDemo()
       @editor = @editorBuilder.getEditor()
       @editorElement = @editorBuilder.getEditorElement()
+
+  compiledSource: (suppressWarning) ->
+    content = @editor.getValue()
+    switch @editorElement.data('language')
+      when 'coffeescript'
+        try
+          CoffeeScript.compile(content, bare: true)
+        catch error
+          alert "Unable to compile track. Open your browser's Javascript console for more details.\n\n#{error.toString()}" unless suppressWarning
+          console.log "Error compiling track"
+          console.log error.toString()
+          console.log error
+          undefined
+      else
+        content
 
   _reset: ->
     if @current_timer
@@ -134,18 +148,10 @@ class ScriptSaver
     requestData ={
       'authenticity_token': @editorElement.data('authenticity_token')
       'script[content]': @editor.getValue()
-      'script[compiled_content]': @_compiledSource()
     }
+    requestData['script[compiled_content]'] = compiled if compiled = @compiledSource(true)
     $.ajax( @editorElement.data('update-url'), method: "PUT", data: requestData ).done =>
       @_markClean()
-
-  _compiledSource: ->
-    content = @editor.getValue()
-    switch @editorElement.data('language')
-      when 'coffeescript'
-        CoffeeScript.compile(content, bare: true)
-      else
-        content
 
 
 scriptRunner = new ScriptRunner()
@@ -216,7 +222,7 @@ class EditorBuilder
       bindKey: {win: 'Ctrl-Enter',  mac: 'Command-Enter'}
       readOnly: true
       exec: (editor) ->
-        scriptRunner.play(editor.getValue())
+        scriptRunner.play(scriptSaver.compiledSource())
     })
 
     @editor.commands.addCommand({
