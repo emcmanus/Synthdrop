@@ -1,5 +1,6 @@
 require('open-uri')
 class Script < ActiveRecord::Base
+  acts_as_paranoid
   belongs_to :user
 
   validates :language,  presence: true, inclusion: { in: %w( javascript coffeescript ) }
