@@ -15,3 +15,6 @@
 #= require_tree
 
 Turbolinks.enableProgressBar()
+
+$(document).ready ->
+  $('[data-toggle="tooltip"]').tooltip()

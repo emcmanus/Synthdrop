@@ -46,7 +46,7 @@
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
           <% unless is_editor? %>
             <ul class="nav navbar-nav">
-              <li> <%= link_to "Tracks", scripts_path %> </li>
+              <li> <%= link_to "Jams", scripts_path %> </li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
               <% if user_signed_in? %>
@@ -58,9 +58,9 @@
             </ul>
           <% else %>
             <ul class="nav navbar-nav navbar-right">
-              <li> <%= link_to "Play", '#', id: 'play-btn', title: 'cmd + enter' %> </li>
-              <li> <%= link_to "Stop", '#', id: 'stop-btn', title: 'cmd + .' %> </li>
-              <li> <%= link_to "Save", '#', id: 'save-btn', title: 'cmd + s' %> </li>
+              <li> <%= link_to "Play", '#', id: 'play-btn', data: { toggle: "tooltip", placement: "bottom", 'original-title': "cmd+enter" } %> </li>
+              <li> <%= link_to "Stop", '#', id: 'stop-btn', data: { toggle: "tooltip", placement: "bottom", 'original-title': "cmd+." } %> </li>
+              <li> <%= link_to "Save", '#', id: 'save-btn', data: { toggle: "tooltip", placement: "bottom", 'original-title': "cmd+s" } %> </li>
               <li> <%= link_to "Edit", edit_script_path(@script) %> </li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
