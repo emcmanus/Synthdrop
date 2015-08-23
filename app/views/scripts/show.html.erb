@@ -1,40 +1,45 @@
 <% content_for(:title, @script.title) %>
 
-<div class="row">
+<div class="row" style="">
   <div class="col-md-12">
-    <div class="pull-right" style="padding-top: 25px;">
-      <span class="label label-primary"><%= @script.language.titleize %></span>
-    </div>
     <h3>
       <%= @script.title %>
-    </h3>
-    Updated <%= time_ago_in_words @script.updated_at %> ago
+      <% if @script.user_id == current_user.id %>
+      <% if @script.aws_id.present? %>
+      <div class="pull-right">
+        <%= link_to "Open Editor", editor_script_path(@script), class: "btn btn-default" %>
+        <%= link_to "Play", '#', id: "play-btn", class: "btn btn-primary" %>
+        <%= link_to "Stop", '#', id: "stop-btn", class: "btn btn-primary" %>
+      </div>
+      <% else %>
+      <%= link_to "Start Editing", editor_script_path(@script), class: "btn btn-primary" %>
+      <% end %>
 
-     - <%= link_to "edit details", edit_script_path(@script) %>
+      <span class="label label-info" style="font-size: 30%; position: relative; top: -5px; left: 10px;"><%= @script.language.titleize %></span>
+    </h3>
+    <% end %>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-12">
     <p class="well"> <%= @script.description %> </p>
   </div>
 </div>
 
-<% if @script.aws_id.present? %>
-  <div class="row">
-    <div class="col-md-12">
-      <p>
-        Import with: <pre> importScripts "<%= @script.compiled_content_url %>" # <%= @script.title %></pre>
-        <br/>
-      </p>
-      <p>Content:</p>
-      <pre><%= @script.content %></pre>
-    </div>
+<div class="row">
+  <div class="col-md-12">
+    <div id="editor" class="unloaded demo" data-content-url="<%= script_content_url @script %>" data-language="<%= @script.language %>" data-read-only="true"></div>
   </div>
-<% end %>
+</div>
 
-<% if @script.user_id == current_user.id %>
-  <% if @script.aws_id.present? %>
-    <%= link_to "Open Editor", editor_script_path(@script), class: "btn btn-default" %>
-  <% else %>
-    <%= link_to "Start Editing", editor_script_path(@script), class: "btn btn-primary" %>
-  <% end %>
-<% else %>
-  <%= link_to "Clone", "javascript:alert('todo');", class: "btn btn-default" %>
-<% end %>
-
+<div class="row" style="margin: 20px 0;">
+  <div class="col-md-12">
+    <p>
+      Updated <%= time_ago_in_words @script.updated_at %> ago.
+      <% if @script.aws_id.present? %>
+        Import with: <pre> importScripts "<%= @script.compiled_content_url %>" # <%= @script.title %></pre>
+      <% end %>
+    </p>
+  </div>
+</div>

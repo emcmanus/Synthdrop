@@ -161,6 +161,7 @@ class EditorBuilder
   constructor: (@editorElement) ->
     @language = @editorElement.data('language')
     @keyboard = @editorElement.data('keyboard')
+    @readOnly = @editorElement.data('read-only')
 
     ace.config.set('workerPath', '/assets/ace')
 
@@ -186,13 +187,16 @@ class EditorBuilder
     @_addListeners()
     @_configureCommands()
 
+    if @readOnly
+      editor.setReadOnly(true)
+
     if window.yieldEditor
       window.yieldEditor(editor)
 
   updateContent: (data) ->
     @editorElement.removeClass('unloaded')
     @editor.setValue data, -1
-    @editor.focus()
+    @editor.focus() unless @readOnly
 
   resize: ->
     @editor.resize()
@@ -207,11 +211,11 @@ class EditorBuilder
     @editorElement.hasClass('demo')
 
   _addListeners: ->
-    @editor.on "blur", =>
-      @editorElement.addClass('blur')
-
-    @editor.on "focus", =>
-      @editorElement.removeClass('blur')
+    unless @readOnly
+      @editor.on "blur", =>
+        @editorElement.addClass('blur')
+      @editor.on "focus", =>
+        @editorElement.removeClass('blur')
 
   _configureCommands: ->
     @editor.commands.removeCommand("gotoline")
@@ -237,7 +241,7 @@ class EditorBuilder
       bindKey: {win: 'Ctrl-s',  mac: 'Command-s'}
       readOnly: true
       exec: (editor) =>
-        unless @isDemo()
+        unless @isDemo() || @readOnly
           scriptSaver._markDirty()
     })
 
