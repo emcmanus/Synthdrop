@@ -58,8 +58,8 @@ class ScriptRunner
 
   _startAudio: ->
     @_audioStarted = true
-    context = new (window.AudioContext || window.webkitAudioContext)()
-    @_source = context.createScriptProcessor(AUDIO_BUFFER_SIZE, 0, 1)
+    @_context ||= new (window.AudioContext || window.webkitAudioContext)()
+    @_source = @_context.createScriptProcessor(AUDIO_BUFFER_SIZE, 0, 1)
     @_source.onaudioprocess = (event) =>
       buffer = event.outputBuffer
       outData = buffer.getChannelData(0)
@@ -70,7 +70,7 @@ class ScriptRunner
         console.log "MISSED A BUFFER. This may mean your script is not fast enough to process audio in realtime, or could be the result of some other bug."
       @_nextAudioBuffer = []
       @_buildNextFrame()
-    @_source.connect(context.destination)
+    @_source.connect(@_context.destination)
 
   _stopAudio: ->
     try
