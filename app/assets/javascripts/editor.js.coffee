@@ -80,6 +80,7 @@ class ScriptRunner
     try
       @_source.disconnect()
     @_audioStarted = false
+    @_samplesGenerated = 0
 
   _buildNextFrame: ->
     @current_worker.postMessage(["generate", @_samplesGenerated, AUDIO_BUFFER_SIZE, SAMPLE_RATE])
