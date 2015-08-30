@@ -9,7 +9,7 @@
           <% if current_user && @script.user_id == current_user.id %>
             <%= link_to "Open Editor", editor_script_path(@script), class: "btn btn-default" %>
           <% end %>
-          <%= link_to "Play", '#', id: "play-btn", class: "btn btn-primary" %>
+          <%= link_to "Play", '#', id: "static-play-btn", class: "btn btn-primary", data: { url: @script.compiled_content_url } %>
           <%= link_to "Stop", '#', id: "stop-btn", class: "btn btn-primary" %>
         <% else %>
           <% if current_user && @script.user_id == current_user.id %>

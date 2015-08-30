@@ -16,6 +16,10 @@ class ScriptRunner
     @_samplesGenerated = 0
     @_audioStarted = false
 
+  playFromUrl: (url) ->
+    $.ajax url: url, success: (data) =>
+      @play(data)
+
   play: (compiledSource) ->
     @_killWorker()
     setEditorControlPlayState(true)
@@ -251,17 +255,17 @@ class EditorBuilder
 
 # TODO - move to event system
 showEditorControls = ->
-  $('#play-btn, #save-btn').show()
+  $('#play-btn, #static-play-btn, #save-btn').show()
 
 hideEditorControls = ->
-  $('#play-btn, #stop-btn, #save-btn').hide()
+  $('#play-btn, #static-play-btn, #stop-btn, #save-btn').hide()
 
 setEditorControlPlayState = (playing) ->
   if playing
-    $('#play-btn').hide()
+    $('#play-btn, #static-play-btn').hide()
     $('#stop-btn').show()
   else
-    $('#play-btn').show()
+    $('#play-btn, #static-play-btn').show()
     $('#stop-btn').hide()
 
 #
@@ -283,6 +287,8 @@ $(document).ready ->
       $(window).resize updateEditorHeight
 
     hideEditorControls()
+    $('#static-play-btn').click (event) ->
+      scriptRunner.playFromUrl($(event.target).data('url'))
     $('#play-btn').click ->
       editorBuilder.getEditor().execCommand('Run')
     $('#stop-btn').click ->
