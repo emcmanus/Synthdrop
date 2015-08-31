@@ -39,6 +39,7 @@ class ScriptsController < ApplicationController
   end
 
   def update
+    @script.touch
     respond_to do |format|
       if @script.update(script_params)
         format.html { redirect_to script_path(@script), notice: 'Updated script' }
