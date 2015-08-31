@@ -13,6 +13,7 @@ SAMPLE_RATE = 44100
 class ScriptRunner
   constructor: ->
     @_nextAudioBuffer = []
+    @_nextStereoAudioBuffer = []
     @_samplesGenerated = 0
     @_audioStarted = false
 
@@ -45,6 +46,10 @@ class ScriptRunner
       when "buffer"
         @_nextAudioBuffer = message.data[1]
         @_startAudio() unless @_audioStarted
+      when "interlacedStereoBuffer"
+        @_nextAudioBuffer = []
+        @_nextStereoAudioBuffer = message.data[1]
+        @_startAudio() unless @_audioStarted
       when "log"
         console.log message.data[1]
       else
@@ -63,16 +68,23 @@ class ScriptRunner
   _startAudio: ->
     @_audioStarted = true
     @_context ||= new (window.AudioContext || window.webkitAudioContext)()
-    @_source = @_context.createScriptProcessor(AUDIO_BUFFER_SIZE, 0, 1)
+    @_source = @_context.createScriptProcessor(AUDIO_BUFFER_SIZE, 0, 2)
     @_source.onaudioprocess = (event) =>
       buffer = event.outputBuffer
-      outData = buffer.getChannelData(0)
-      if @_nextAudioBuffer.length > 0
+      if @_nextStereoAudioBuffer.length > 0
+        leftData = buffer.getChannelData(0)
+        rightData = buffer.getChannelData(1)
+        for i in [0...leftData.length]
+          leftData[i] = @_nextStereoAudioBuffer[ i * 2 ]
+          rightData[i] = @_nextStereoAudioBuffer[ i * 2 + 1 ]
+      else if @_nextAudioBuffer.length > 0
+        monoData = buffer.getChannelData(0)
         for i in [0...buffer.length]
-          outData[i] = @_nextAudioBuffer[i]
+          monoData[i] = @_nextAudioBuffer[i]
       else
         console.log "MISSED A BUFFER. This may mean your script is not fast enough to process audio in realtime, or could be the result of some other bug."
       @_nextAudioBuffer = []
+      @_nextStereoAudioBuffer = []
       @_buildNextFrame()
     @_source.connect(@_context.destination)
 
