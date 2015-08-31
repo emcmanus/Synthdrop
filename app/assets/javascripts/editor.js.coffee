@@ -168,8 +168,6 @@ class EditorBuilder
     @keyboard = @editorElement.data('keyboard')
     @readOnly = @editorElement.data('read-only')
 
-    ace.config.set('workerPath', '/assets/ace')
-
     @editor = editor = ace.edit("editor")
     editor.setTheme("ace/theme/terminal")
 
