@@ -1,5 +1,10 @@
 ## Synthdrop
 
+A super-hackable, social enviroment for digital signal processing. Available at
+http://synthdrop.com
+
+![Index](readme/index.png)
+
 #### General config
 
 1. Copy .env to .env.example and add values
