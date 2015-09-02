@@ -11,5 +11,5 @@ http://synthdrop.com
 
 #### S3 Configuration
 
-1. Set environment variables
+1. Update environment variables in `.env`
 1. Enable versioning on production bucket (optional)
