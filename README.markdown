@@ -1,6 +1,6 @@
 ## Synthdrop
 
-A super-hackable, social enviroment for digital signal processing. Available at
+A super-hackable, social environment for digital signal processing. Available at
 http://synthdrop.com
 
 ![Index](readme/index.png)
