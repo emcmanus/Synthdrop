@@ -3,7 +3,6 @@
 
 # TODO - Migrate to event system for much of this
 
-
 SAVE_WARNING_THRESHOLD = 3000
 
 AUDIO_BUFFER_SIZE = 2048
@@ -13,7 +12,6 @@ SAMPLE_RATE = 44100
 class ScriptRunner
   constructor: ->
     @_nextAudioBuffer = []
-    @_nextStereoAudioBuffer = []
     @_samplesGenerated = 0
     @_audioStarted = false
 
@@ -46,10 +44,6 @@ class ScriptRunner
       when "buffer"
         @_nextAudioBuffer = message.data[1]
         @_startAudio() unless @_audioStarted
-      when "interlacedStereoBuffer"
-        @_nextAudioBuffer = []
-        @_nextStereoAudioBuffer = message.data[1]
-        @_startAudio() unless @_audioStarted
       when "log"
         console.log message.data[1]
       else
@@ -71,20 +65,15 @@ class ScriptRunner
     @_source = @_context.createScriptProcessor(AUDIO_BUFFER_SIZE, 0, 2)
     @_source.onaudioprocess = (event) =>
       buffer = event.outputBuffer
-      if @_nextStereoAudioBuffer.length > 0
+      if @_nextAudioBuffer.length > 0
         leftData = buffer.getChannelData(0)
         rightData = buffer.getChannelData(1)
         for i in [0...leftData.length]
-          leftData[i] = @_nextStereoAudioBuffer[ i * 2 ]
-          rightData[i] = @_nextStereoAudioBuffer[ i * 2 + 1 ]
-      else if @_nextAudioBuffer.length > 0
-        monoData = buffer.getChannelData(0)
-        for i in [0...buffer.length]
-          monoData[i] = @_nextAudioBuffer[i]
+          leftData[i] = @_nextAudioBuffer[ i*2 ]
+          rightData[i] = @_nextAudioBuffer[ i*2+1 ]
       else
         console.log "MISSED A BUFFER. This may mean your script is not fast enough to process audio in realtime, or could be the result of some other bug."
       @_nextAudioBuffer = []
-      @_nextStereoAudioBuffer = []
       @_buildNextFrame()
     @_source.connect(@_context.destination)
 
